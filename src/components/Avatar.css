@@ -1,0 +1,15 @@
+.circle {
+  display: inline-block;
+  margin-left: 10px;
+  width: 2em;
+  height: 2em;
+  border-radius: 100%;
+  background: lightblue;
+  min-width: 15px;
+  max-width: 35px;
+}
+.user-name {
+  display: inline-block;
+  font-style: italic;
+  color: #525252;
+}

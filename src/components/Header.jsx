@@ -1,10 +1,11 @@
 import React from 'react';
+import './Header.css';
 import Avatar from './Avatar';
 
 const Header = () => (
-  <div>
-    <div>Tracker</div>
-    <div><Avatar /></div>
+  <div className="container">
+    <div className="app-name"><h2>Tracker</h2></div>
+    <div className="avatar"><Avatar /></div>
   </div>
 );
 
