@@ -2,6 +2,8 @@ import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
+import { DndProvider } from 'react-dnd';
+import Backend from 'react-dnd-html5-backend';
 import './App.css';
 import Header from './components/Header';
 import Group from './components/Group';
@@ -59,11 +61,13 @@ function App() {
       <div className={style.root}>
         <Header />
         <div className={style.contentContainer}>
-          <GridList className={style.gridList}>
-            {Object.keys(groups).map((name) => (
-              <Group key={name} name={name} items={groups[name].items} />
-            ))}
-          </GridList>
+          <DndProvider backend={Backend}>
+            <GridList className={style.gridList}>
+              {Object.keys(groups).map((name) => (
+                <Group key={name} name={name} items={groups[name].items} />
+              ))}
+            </GridList>
+          </DndProvider>
         </div>
       </div>
     </>
