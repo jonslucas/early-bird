@@ -4,6 +4,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { useDrag } from 'react-dnd';
+import Types from '../state/dnd/types';
 
 const style = makeStyles({
   root: {
@@ -11,17 +13,24 @@ const style = makeStyles({
   },
 });
 
-const CardWrap = ({ item }) => (
-  <div>
-    <Card className={style.root}>
-      <CardContent>
-        <Typography variant="body1" gutterBottom>
-          {item.label}
-        </Typography>
-      </CardContent>
-    </Card>
-  </div>
-);
+const CardWrap = ({ item }) => {
+  const [monitor, dragRef] = useDrag({
+    item: { type: Types.CARD },
+    collect: monitor => monitor,
+  });
+  console.log({ item: monitor.getItem() });
+  return (
+    <div ref={dragRef}>
+      <Card className={style.root}>
+        <CardContent>
+          <Typography variant="body1" gutterBottom>
+            {item.label}
+          </Typography>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
 
 CardWrap.propTypes = {
   item: PropTypes.shape({
