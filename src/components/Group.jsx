@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDrop } from 'react-dnd';
-import CardWrap from './Card';
+import TaskCard from './TaskCard';
 import Types from '../state/dnd/types';
 
 const useStyles = makeStyles({
@@ -40,20 +40,24 @@ const useStyles = makeStyles({
   },
 });
 
-function moveCard(groupId) {
-  console.log({ groupId });
-}
-
-const Group = ({ name, items }) => {
+const Group = ({
+  name,
+  items,
+  id,
+  moveCard,
+}) => {
   const style = useStyles();
+
   const [{ isOver }, dropRef] = useDrop({
     accept: Types.CARD,
-    drop: () => moveCard(name),
-    collect: monitor => ({
+    drop: (item) => {
+      if (item.groupId !== id) moveCard(item.cardId, item.groupId, id);
+    },
+    collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   });
-  console.log({ isOver });
+
   return (
     <Container className={style.root} disableGutters>
       <Card className="" variant="outlined" ref={dropRef}>
@@ -61,8 +65,8 @@ const Group = ({ name, items }) => {
           {name}
         </Typography>
         <CardContent className={style.content}>
-          {items.map((i) => (<CardWrap item={i} key={i} />))}
-          {isOver && <Card className={style.preview}></Card>}
+          {items.map((i) => (<TaskCard id={i} key={i} groupId={id} />))}
+          {isOver && <Card className={style.preview} />}
         </CardContent>
         <CardActions className={style.footer}>
           <Button size="small">Add Card</Button>
@@ -75,8 +79,10 @@ const Group = ({ name, items }) => {
 Group.propTypes = {
   name: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(
-    PropTypes.object,
+    PropTypes.number,
   ),
+  id: PropTypes.string.isRequired,
+  moveCard: PropTypes.func.isRequired,
 };
 
 Group.defaultProps = {
