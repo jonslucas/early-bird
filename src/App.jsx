@@ -4,30 +4,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import rootReducer from './state/rootReducer';
 import './App.css';
 import Header from './components/Header';
-import Group from './components/Group';
-
-const groups = {
-  Backlog: {
-    items: [],
-  },
-  Active: {
-    items: [{
-      label: 'Create Portfolio to Assist with Finding a New Job',
-      comments: [],
-      assignedTo: null,
-      watchers: [],
-      tags: [],
-    }],
-  },
-  Review: {
-    items: [],
-  },
-  Complete: {
-    items: [],
-  },
-};
+import GroupList from './components/GroupList';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,21 +38,19 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const style = useStyles();
   return (
-    <>
+    <Provider store={createStore(rootReducer)}>
       <CssBaseline />
       <div className={style.root}>
         <Header />
         <div className={style.contentContainer}>
           <DndProvider backend={Backend}>
             <GridList className={style.gridList}>
-              {Object.keys(groups).map((name) => (
-                <Group key={name} name={name} items={groups[name].items} />
-              ))}
+              <GroupList />
             </GridList>
           </DndProvider>
         </div>
       </div>
-    </>
+    </Provider>
   );
 }
 
