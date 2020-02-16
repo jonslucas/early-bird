@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -13,12 +14,21 @@ const style = makeStyles({
   },
 });
 
-const CardWrap = ({ item }) => {
-  const [monitor, dragRef] = useDrag({
-    item: { type: Types.CARD },
-    collect: monitor => monitor,
+const stateToProps = (state, ownProps) => ({
+  ...ownProps,
+  item: state.tasks[ownProps.id],
+});
+
+const TaskCard = ({ item, id, groupId }) => {
+  const [, dragRef] = useDrag({
+    item: {
+      type: Types.CARD,
+      cardId: id,
+      groupId,
+    },
+    collect: (monitor) => monitor,
   });
-  console.log({ item: monitor.getItem() });
+
   return (
     <div ref={dragRef}>
       <Card className={style.root}>
@@ -32,10 +42,12 @@ const CardWrap = ({ item }) => {
   );
 };
 
-CardWrap.propTypes = {
+TaskCard.propTypes = {
   item: PropTypes.shape({
     label: PropTypes.string,
   }).isRequired,
+  id: PropTypes.number.isRequired,
+  groupId: PropTypes.string.isRequired,
 };
 
-export default CardWrap;
+export default connect(stateToProps)(TaskCard);
