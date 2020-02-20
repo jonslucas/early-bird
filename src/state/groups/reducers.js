@@ -3,6 +3,8 @@ import {
   DELETE_GROUP,
   LOAD_GROUPS,
   MOVE_TASK,
+  ADD_TASK,
+  REMOVE_TASK,
 } from './types';
 
 const initialState = {
@@ -56,6 +58,26 @@ const groups = (state = initialState, action) => {
         [dstId]: {
           ...state[dstId],
           items: [...state[dstId].items, taskId],
+        },
+      };
+    }
+    case REMOVE_TASK: {
+      const { id, taskId } = action;
+      return {
+        ...state,
+        [id]: {
+          ...state[id],
+          items: state[id].items.filter((elem) => elem !== taskId),
+        },
+      };
+    }
+    case ADD_TASK: {
+      const { id, taskId } = action;
+      return {
+        ...state,
+        [id]: {
+          ...state[id],
+          items: [...state[id].items, taskId],
         },
       };
     }
