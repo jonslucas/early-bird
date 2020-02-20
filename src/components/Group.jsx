@@ -6,6 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDrop } from 'react-dnd';
 import TaskCard from './TaskCard';
@@ -28,6 +29,8 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#d3d3d33b',
+    justifyContent: 'space-between',
+    width: '100%',
   },
   footer: {
     display: 'flex',
@@ -37,6 +40,12 @@ const useStyles = makeStyles({
     height: '5em',
     width: '100%',
     opacity: '0.5',
+    backgroundColor: 'grey',
+    margin: '10px 0',
+  },
+  newTask: {
+    margin: '.5em 0',
+    padding: '.5em',
   },
 });
 
@@ -45,6 +54,7 @@ const Group = ({
   items,
   id,
   moveCard,
+  createTask,
 }) => {
   const style = useStyles();
 
@@ -58,6 +68,16 @@ const Group = ({
     }),
   });
 
+  const [adding, addTask] = React.useState(false);
+  const [newTask, editTask] = React.useState('');
+
+  const handleAdd = () => addTask(true);
+  const handleAddCancel = () => addTask(false);
+
+
+  const handleSave = () => createTask(newTask);
+  const handleEdit = (e) => editTask(e.target.value);
+
   return (
     <Container className={style.root} disableGutters>
       <Card className="" variant="outlined" ref={dropRef}>
@@ -67,9 +87,22 @@ const Group = ({
         <CardContent className={style.content}>
           {items.map((i) => (<TaskCard id={i} key={i} groupId={id} />))}
           {isOver && <Card className={style.preview} />}
+          {adding && (
+            <Card className={style.newTask}>
+              <form onSubmit={handleSave}>
+                <TextField id="standard-basic" label="Task" onChange={handleEdit} />
+              </form>
+            </Card>
+          )}
         </CardContent>
         <CardActions className={style.footer}>
-          <Button size="small">Add Card</Button>
+          {adding && (
+            <>
+              <Button size="small" onClick={handleSave}>Add</Button>
+              <Button size="small" onClick={handleAddCancel}>Cancel</Button>
+            </>
+          )}
+          {!adding && <Button size="small" onClick={handleAdd}>Add Card</Button>}
         </CardActions>
       </Card>
     </Container>
@@ -83,6 +116,7 @@ Group.propTypes = {
   ),
   id: PropTypes.string.isRequired,
   moveCard: PropTypes.func.isRequired,
+  createTask: PropTypes.func.isRequired,
 };
 
 Group.defaultProps = {

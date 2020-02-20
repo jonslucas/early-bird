@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Group from './Group';
-import { moveTask } from '../state/groups/actions';
+import { moveTask, addTask } from '../state/groups/actions';
+import { createTask } from '../state/tasks/actions';
 
 const stateToProps = (state, ownProps) => ({
   ...ownProps,
@@ -15,9 +16,14 @@ const stateToProps = (state, ownProps) => ({
 
 const dispatchToProps = (dispatch) => ({
   moveCard: (card, src, dst) => dispatch(moveTask(card, src, dst)),
+  createAndAdd: (groupId) => (label) => {
+    const taskId = 2;
+    dispatch(createTask(taskId, label));
+    dispatch(addTask(groupId, taskId));
+  },
 });
 
-const GroupList = ({ groups, moveCard }) => (
+const GroupList = ({ groups, moveCard, createAndAdd }) => (
   <>
     {groups.map((g) => (
       <Group
@@ -26,6 +32,7 @@ const GroupList = ({ groups, moveCard }) => (
         items={g.items}
         id={g.id}
         moveCard={moveCard}
+        createTask={createAndAdd(g.id)}
       />
     ))}
   </>
@@ -40,6 +47,7 @@ GroupList.propTypes = {
     }),
   ),
   moveCard: PropTypes.func.isRequired,
+  createAndAdd: PropTypes.func.isRequired,
 };
 
 GroupList.defaultProps = {
