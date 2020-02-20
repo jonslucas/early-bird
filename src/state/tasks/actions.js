@@ -4,9 +4,10 @@ import {
   LOAD_TASKS,
 } from './types';
 
-export const createTask = (task) => ({
+export const createTask = (id, label) => ({
   type: CREATE_TASK,
-  task,
+  id,
+  label,
 });
 
 export const deleteTask = (id) => ({

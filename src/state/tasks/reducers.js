@@ -4,6 +4,14 @@ import {
   LOAD_TASKS,
 } from './types';
 
+const template = {
+  label: '',
+  comments: [],
+  assignedTo: null,
+  watchers: [],
+  tags: [],
+};
+
 const initialState = {
   1: {
     label: 'Create Portfolio to Assist with Finding a New Job',
@@ -22,10 +30,13 @@ const tasks = (state = initialState, action) => {
         ...action.tasks,
       };
     case CREATE_TASK: {
-      const { id, data } = action.task;
+      const { id, label } = action;
       return {
         ...state,
-        [id]: data,
+        [id]: {
+          ...template,
+          label,
+        },
       };
     }
     case DELETE_TASK: {
