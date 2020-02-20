@@ -31,6 +31,8 @@ const useStyles = makeStyles({
     backgroundColor: '#d3d3d33b',
     justifyContent: 'space-between',
     width: '100%',
+    padding: '.5em',
+    minHeight: '3em',
   },
   footer: {
     display: 'flex',
